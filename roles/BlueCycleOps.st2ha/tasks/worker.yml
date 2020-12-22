@@ -16,7 +16,7 @@
     st2_packs: []
     st2_python_packages:
       - redis
-    # run everything except st2notifier service
+    # run everything except: st2notifier, st2timersengine
     st2_services:
       - st2actionrunner
       - st2garbagecollector
@@ -26,6 +26,8 @@
       - st2api
       - st2stream
       - st2auth
+      - st2workflowengine
+      - st2scheduler
     st2ha_packs:
       - st2
     st2web_nginx_config: "{{ lookup('template', '../templates/nginx_worker.conf.j2') }}"

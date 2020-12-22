@@ -17,6 +17,7 @@
 - [x] `st2chatops` on controller
 - [x] `st2notifier` on controller
 - [x] ability to disable certain services (st2ctl)
+- [ ] `st2timer` on controller
 - [ ] Pack management workflows
 - [ ] backup workflows
 - [ ] monitoring
