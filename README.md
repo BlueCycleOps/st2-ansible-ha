@@ -9,24 +9,24 @@
   - MongoDB
   - RabbitMQ
 - [x] Datastore key distribution
-- [ ] inject SSL certs
-  - where do we get these from? (see questions)
-- [ ] distributed CA (directory from repo)
+- [x] distributed CA (directory from repo)
 - [x] firewal configs
-- [ ] nginx configs
-- [ ] redis
+- [x] nginx configs
+- [x] redis
   - install redis python module
+- [ ] st2scheduler on one host
+- [ ] Pack management workflows
+- [ ] backup workflows
+- [ ] monitoring
+- [ ] Ansible Collections formatting
 - [ ] Makefile (or similar) to setup "all of the things"
   - virtualenv
   - python requirements
   - ansible collections
-- [ ] monitoring
-- [ ] Ansible Collections formatting
 - [ ] Terraform deploy
-- [ ] Pack management workflows
-- [ ] backup workflows
-- [ ] st2schedule on one host
 - [ ] Packer builder
+- [ ] inject SSL certs
+  - where do we get these from? (see questions)
 
 ## Thoughts/questions
 
@@ -61,6 +61,8 @@
   - https://github.com/StackStorm/ansible-st2/pull/279
 - datastore key distribution
   - https://github.com/StackStorm/ansible-st2/pull/280
+- python packages to install redis module:
+  - https://github.com/StackStorm/ansible-st2/pull/281
 
 
 ## Development
@@ -93,11 +95,33 @@ Start up the Vagrant VMs:
 vagrant up
 ```
 
+### Distributing CA certificates
+
+The `BlueCycleOps.ssl` role is able to distribute a CA certificate to all of the
+StackStorm nodes and install it as a trusted CA cert in each of those OSes.
+
+To do this we look, by default, in the directory `files/ssl/ca/` and install all of
+those CA certificates onto the target hosts.
+
+So, to get started make that directory:
+```shell
+mkdir -p files/ssl/ca
+```
+
+Next, move all of the CA certificates into that directory
+```
+cp xxx.crt yyy.pem files/ssl/ca/
+```
+
+Finally, run the playbooks and those CA certificates will be pushed to the hosts!
+
 ### Provisioning the controller
 
 ```shell
 ansible-playbook -i inventories -l controllers stackstorm-controller.yml
 ```
+
+### Provisioning workers
 
 ```shell
 ansible-playbook -i inventories -l workers stackstorm-worker.yml

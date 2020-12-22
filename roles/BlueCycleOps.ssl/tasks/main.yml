@@ -1,0 +1,16 @@
+---
+- name: "Recursively find CA certificates in the path {{ ssl_ca_dir }}"
+  find:
+    paths: "{{ ssl_ca_dir }}"
+  register: ssl_ca_find_result
+  delegate_to: 127.0.0.1
+
+- name: "Extract the names of the file paths found in path"
+  set_fact:
+    ssl_ca_list: "{{ ssl_ca_find_result.files | map(attribute='path') | list }}"
+
+- include_tasks: ssl_ca_debian.yml
+  when: ansible_os_family == "Debian"
+
+- include_tasks: ssl_ca_red_hat.yml
+  when: ansible_os_family == "RedHat"

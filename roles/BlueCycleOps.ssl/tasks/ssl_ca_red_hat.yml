@@ -1,0 +1,26 @@
+---
+- name: Make sure the folder exists (Red Hat)
+  become: yes
+  file:
+    path: /etc/pki/ca-trust/source/anchors
+    state: directory
+
+- name: Copy PEM into folder (Red Hat)
+  become: yes
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/pki/ca-trust/source/anchors/{{ item | basename }}"
+  with_items: "{{ ssl_ca_list }}"
+  register: result
+
+- name: Update CA Trust (Red Hat)
+  become: yes
+  command: update-ca-trust
+  when: result.changed
+
+- name: Update CA Trust (Red Hat < 7)
+  become: yes
+  command: update-ca-trust enable
+  when:
+    - result.changed
+    - ansible_distribution_version|int < 7

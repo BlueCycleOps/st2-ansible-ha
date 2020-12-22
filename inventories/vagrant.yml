@@ -9,6 +9,9 @@ all:
     st2ha_rabbitmq_password: Ch@ngeMe1
     st2ha_rabbitmq_vhost: '/'
     st2ha_redis_password: Ch@ngeMe1
+    # Username/password used by StackStorm standalone authentication
+    st2_auth_username: st2admin
+    st2_auth_password: Ch@ngeMe
 
   children:
     controllers:

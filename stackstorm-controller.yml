@@ -16,3 +16,4 @@
     - StackStorm.nginx
     - StackStorm.st2repo
     - StackStorm.st2web
+    - BlueCycleOps.ssl
