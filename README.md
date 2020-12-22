@@ -14,7 +14,7 @@
 - [x] nginx configs
 - [x] redis
   - install redis python module
-- [ ] st2scheduler on one host
+- [ ] `st2notifier` on one host
 - [ ] Pack management workflows
 - [ ] backup workflows
 - [ ] monitoring
