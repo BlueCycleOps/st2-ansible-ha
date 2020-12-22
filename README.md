@@ -14,7 +14,9 @@
 - [x] nginx configs
 - [x] redis
   - install redis python module
-- [ ] `st2notifier` on one host
+- [x] `st2chatops` on controller
+- [x] `st2notifier` on controller
+- [x] ability to disable certain services (st2ctl)
 - [ ] Pack management workflows
 - [ ] backup workflows
 - [ ] monitoring

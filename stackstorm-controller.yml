@@ -13,7 +13,10 @@
     - BlueCycleOps.mongodb
     - BlueCycleOps.rabbitmq
     - BlueCycleOps.redis
-    - StackStorm.nginx
     - StackStorm.st2repo
+    - StackStorm.st2
+    - StackStorm.nginx
     - StackStorm.st2web
     - BlueCycleOps.ssl
+    - StackStorm.nodejs
+    - StackStorm.st2chatops

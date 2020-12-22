@@ -142,6 +142,14 @@
   loop: "{{ st2_services }}"
   tags: st2
 
+- name: Modify st2ctl to only control the given services
+  become: yes
+  lineinfile:
+    path: /opt/stackstorm/st2/bin/st2ctl
+    regexp: '^COMPONENTS='
+    line: "COMPONENTS=\"{{ st2_services | join (' ') }}\""
+  tags: st2
+
 # Since flush handlers does not support conditionals, we need to have a dedicated playbook
 # https://github.com/ansible/ansible/issues/41313#issuecomment-520891625
 - name: Flush handlers to prepare StackStorm if there are packs to install

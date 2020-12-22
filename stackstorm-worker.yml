@@ -15,6 +15,3 @@
     - StackStorm.nginx
     - StackStorm.st2web
     - BlueCycleOps.ssl
-    - StackStorm.nodejs
-    - StackStorm.st2chatops
-    - StackStorm.st2smoketests
