@@ -1,0 +1,56 @@
+---
+# reference
+# https://github.com/cognifloyd/st2_installer.ansible/blob/main/roles/mongodb/tasks/main.yml
+
+- debug:
+    msg:  mongodb_version {{ mongodb_version }}
+
+- name: Retrieve variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  tags: [databases, mongodb]
+
+- name: Install pymongodb on {{ ansible_facts.distribution }}
+  include_tasks: mongodb_{{ ansible_os_family | lower }}.yml
+  tags: [databases, mongodb]
+
+- include_role:
+    name: community.mongodb.mongodb_repository
+    apply:
+      become: yes
+
+# use this role to install because it installs CLI tools, etc
+- include_role:
+    name: community.mongodb.mongodb_install
+    apply:
+      become: yes
+
+- include_role:
+    name: community.mongodb.mongodb_mongod
+    apply:
+      become: yes
+  vars:
+    # install a standlone node
+    replicaset: false
+    sharding: false
+
+# TODO do we want to write something into the database?
+# - include_role:
+#     name: community.mongodb.mongodb_shell
+#     apply:
+#       become: yes
+
+- include_role:
+    name: community.mongodb.mongodb_auth
+    apply:
+      become: yes
+
+- name: Allow MongoDB through Firewall
+  become: yes
+  ansible.posix.firewalld:
+    service: mongodb
+    immediate: true
+    permanent: true
+    state: enabled

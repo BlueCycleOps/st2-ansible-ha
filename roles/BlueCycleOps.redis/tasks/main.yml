@@ -1,0 +1,14 @@
+---
+- include_role:
+    name: geerlingguy.redis
+    apply:
+      become: yes
+
+- name: Allow Redis through Firewall
+  become: yes
+  ansible.posix.firewalld:
+    service: redis
+    immediate: true
+    permanent: true
+    state: enabled
+

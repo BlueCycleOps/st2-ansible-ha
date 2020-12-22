@@ -1,0 +1,23 @@
+---
+
+- name: Make local directory for st2ha files
+  delegate_to: localhost
+  file:
+    path: files
+    state: directory
+  when: not st2_datastore_key
+
+- name: Generate st2ha encryption key
+  delegate_to: localhost
+  shell:
+    cmd: source virtualenv/bin/activate && st2-generate-symmetric-crypto-key --key-path files/datastore.json
+    chdir: "{{ lookup('env', 'PWD') }}"
+  args:
+    creates: "files/datastore.json"
+  when: not st2_datastore_key
+
+- name: Read st2_datastore_key from files/datastore.json
+  delegate_to: localhost
+  set_fact:
+    st2_datastore_key: "{{ lookup('file', 'files/datastore.json') }}"
+  when: not st2_datastore_key

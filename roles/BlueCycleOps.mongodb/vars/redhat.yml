@@ -3,3 +3,4 @@ mongo_dependencies:
       - pyOpenSSL
       - python-pyasn1
       - python-ndg_httpsclient
+      - python2-pip

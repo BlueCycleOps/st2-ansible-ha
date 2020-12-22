@@ -1,11 +1,10 @@
 ---
 galaxy_info:
-  description: Install st2web
-  author: humblearner
-  company: StackStorm
-  license: Apache
+  description: Setup StackStorm HA components
+  author: BlueCycleOps
+  company: BlueCycleOps
+  license: Apache 2.0
   min_ansible_version: 2.5
-  tags: st2web
   platforms:
     - name: Ubuntu
       versions:
@@ -17,6 +16,9 @@ galaxy_info:
         - 8
   galaxy_tags:
     - system
-dependencies:
-  - role: StackStorm.nginx
-  - role: StackStorm.st2repo
+    - stackstorm
+    - st2
+    - automation
+    - remediation
+    - devops
+    - ha

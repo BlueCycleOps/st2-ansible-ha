@@ -1,0 +1,33 @@
+---
+
+- name: Prepare the StackStorm Datastore key
+  include_tasks: datastore_key.yml
+  tags: st2ha
+  when: not st2_datastore_key
+
+- name: Build /etc/hosts file from Ansible inventory so StackStorm hosts can talk to each other
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_default_ipv4.address | default(hostvars[item].ansible_host) }} {{ item }}"
+    state: present
+  with_items: "{{ st2ha_hosts_all }}"
+
+- name: Prepare the StackStorm Controller
+  include_tasks: controller.yml
+  tags: st2ha
+  when: st2ha_node_type == 'controller'
+
+- name: Prepare the StackStorm Worker
+  include_tasks: worker.yml
+  tags: st2ha
+  when: st2ha_node_type == 'worker'
+
+- name: Allow HTTPS traffic through the firewall
+  become: yes
+  ansible.posix.firewalld:
+    service: https
+    immediate: true
+    permanent: true
+    state: enabled

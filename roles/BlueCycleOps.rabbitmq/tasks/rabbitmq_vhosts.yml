@@ -1,0 +1,20 @@
+---
+- name: Remove RabbitMQ vhosts
+  become: yes
+  community.rabbitmq.rabbitmq_vhost:
+    vhost: "{{ _rmq_vhost }}"
+    state: absent
+  loop_control:
+    loop_var: _rmq_vhost
+  loop: "{{ rabbitmq_absent_vhosts }}"
+  tags: rabbitmq
+
+- name: Add RabbitMQ vhosts
+  become: yes
+  community.rabbitmq.rabbitmq_vhost:
+    vhost: "{{ _rmq_vhost }}"
+    state: present
+  loop_control:
+    loop_var: _rmq_vhost
+  loop: "{{ rabbitmq_vhosts }}"
+  tags: rabbitmq

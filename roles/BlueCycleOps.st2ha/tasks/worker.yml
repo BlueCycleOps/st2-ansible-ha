@@ -1,0 +1,22 @@
+---
+
+- name: Prepare StackStorm Worker variables
+  set_fact:
+    st2_config:
+      coordination:
+        url: "redis://:{{ st2ha_redis_password }}@{{ st2ha_controller_host }}"
+      database:
+        host: "{{ st2ha_controller_host }}"
+        username: "{{ st2ha_mongodb_username }}"
+        password: "{{ st2ha_mongodb_password }}"
+        db_name: "{{ st2ha_mongodb_database }}"
+      messaging:
+        url: "amqp://{{ st2ha_rabbitmq_username }}:{{ st2ha_rabbitmq_password }}@{{ st2ha_controller_host }}:5672/"
+    # we'll install the st2 pack later, put them in st2ha_packs
+    st2_packs: []
+    st2_python_packages:
+      - redis
+    st2ha_packs:
+      - st2
+    st2web_nginx_config: "{{ lookup('template', '../templates/nginx_worker.conf.j2') }}"
+  tags: st2ha, config

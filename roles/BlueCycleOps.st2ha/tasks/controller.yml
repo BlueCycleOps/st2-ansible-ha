@@ -1,0 +1,25 @@
+---
+
+- name: Prepare StackStorm Controller variables
+  set_fact:
+    mongodb_admin_pwd: "{{ st2ha_mongodb_password }}"
+    mongodb_users:
+      - db: "{{ st2ha_mongodb_database }}"
+        user: "{{ st2ha_mongodb_username }}"
+        pwd: "{{ st2ha_mongodb_password }}"
+        roles: "readWrite,dbAdmin"
+    rabbitmq_vhosts:
+      - "{{ st2ha_rabbitmq_vhost }}"
+    rabbitmq_users:
+      - user: "{{ st2ha_rabbitmq_username }}"
+        password: "{{ st2ha_rabbitmq_password }}"
+        permissions:
+          - vhost: "{{ st2ha_rabbitmq_vhost }}"
+            configure_priv: .*
+            read_priv: .*
+            write_priv: .*
+    redis_bind_interface: 0.0.0.0
+    redis_requirepass: "{{ st2ha_redis_password }}"
+    st2web_nginx_config: "{{ lookup('template', '../templates/nginx_controller.conf.j2') }}"
+  tags: st2ha, config
+

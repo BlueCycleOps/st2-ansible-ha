@@ -1,0 +1,12 @@
+---
+- name: Install pip (for the installation of pymongo)
+  become: yes
+  package:
+    name: python-pip
+    state: present
+  tags: [databases, mongodb]
+  
+- name: Install pymongo (required to setup MongoDB auth)
+  become: yes
+  pip:
+    name: pymongo

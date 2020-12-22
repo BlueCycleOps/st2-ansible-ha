@@ -1,0 +1,4 @@
+ansible
+# not sure why we can't install this from st2common, but if we do it this way it works
+git+https://github.com/StackStorm/st2-rbac-backend.git@master#egg=st2-rbac-backend
+git+https://github.com/StackStorm/st2.git#egg=st2common&subdirectory=st2common

@@ -1,0 +1,35 @@
+---
+all:
+  vars:
+    st2ha_controller_host: st2ctr
+    st2ha_mongodb_database: st2
+    st2ha_mongodb_username: stackstorm
+    st2ha_mongodb_password: Ch@ngeMe1
+    st2ha_rabbitmq_username: stackstorm
+    st2ha_rabbitmq_password: Ch@ngeMe1
+    st2ha_rabbitmq_vhost: '/'
+    st2ha_redis_password: Ch@ngeMe1
+
+  children:
+    controllers:
+      vars:
+        st2ha_node_type: 'controller'
+      hosts:
+        st2ctr:
+          ansible_host: 192.168.121.100
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: .vagrant/machines/st2ctr/libvirt/private_key
+    
+    workers:
+      vars:
+        st2ha_node_type: 'worker'
+      hosts:
+        st2wrk1:
+          ansible_host: 192.168.121.101
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: .vagrant/machines/st2wrk1/libvirt/private_key
+        st2wrk2:
+          ansible_host: 192.168.121.102
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: .vagrant/machines/st2wrk2/libvirt/private_key
+  
