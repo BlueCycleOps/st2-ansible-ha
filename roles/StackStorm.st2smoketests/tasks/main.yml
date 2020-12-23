@@ -11,7 +11,7 @@
   changed_when: no
   tags:
     - smoke-tests
-  when: "{{ 'st2actionrunner' in st2_services }}"
+  when: "'st2actionrunner' in st2_services"
 
 - name: st2 installed
   command: st2 --version
@@ -39,6 +39,7 @@
     url: https://localhost/
     validate_certs: no
   changed_when: no
+  when: st2web_version is defined and st2web_version
   tags:
     - smoke-tests
 

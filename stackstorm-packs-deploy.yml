@@ -1,0 +1,5 @@
+---
+- name: Deploy StackStorm packs to a set of workers
+  hosts: all
+  roles:
+    - BlueCycleOps.st2hapacks

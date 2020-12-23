@@ -1,0 +1,14 @@
+---
+# list of packs to install, these can either be pack names or URLs to a git repo
+# see the following link for possible formats: https://docs.stackstorm.com/packs.html
+st2ha_packs: []
+
+# Path to where the local pack configs can be found.
+# All files in this directory will be copied to the remote workers and placed into
+# /opt/stackstorm/configs
+st2ha_pack_configs_path: files/st2/configs/
+
+# Path to where the local StackStork keys files can be found.
+# All files in this directory will be loaded into the StackStorm datastore with
+# the command: st2 key load
+st2ha_keys_path: files/st2/keys/

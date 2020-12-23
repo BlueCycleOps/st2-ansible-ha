@@ -1,0 +1,47 @@
+---
+
+- name: Install StackStorm packs
+  become: yes
+  shell: "/opt/stackstorm/st2/bin/st2-pack-install {{ st2ha_packs | join(' ') }}"
+
+- name: "Find all pack configs in {{ st2ha_pack_configs_path }}"
+  find:
+    paths: "{{ st2ha_pack_configs_path }}"
+  register: st2ha_packs_configs_result
+  delegate_to: 127.0.0.1
+
+- name: "Extract the names of the file paths found in packs configs path"
+  set_fact:
+    st2ha_packs_configs_list: "{{ st2ha_packs_configs_result.files | map(attribute='path') | list }}"
+
+- name: Copy StackStorm pack configs
+  become: yes
+  copy:
+    src: "{{ item }}"
+    dest: "/opt/stackstorm/configs/{{ item | basename }}"
+    mode: 0640
+    owner: st2
+    group: root
+  with_items: "{{ st2ha_packs_configs_list }}"
+
+- name: "Find all StackStorm keys files in {{ st2ha_keys_path }}"
+  find:
+    paths: "{{ st2ha_keys_path }}"
+  register: st2ha_keys_result
+  delegate_to: 127.0.0.1
+
+- name: "Extract the names of the file paths found in keys path"
+  set_fact:
+    st2ha_keys_list: "{{ st2ha_keys_result.files | map(attribute='path') | list }}"
+    
+- include_tasks:
+    file: keys.yml
+    apply:
+      vars:
+        st2ha_keys_file: "{{ item }}"
+  with_items: "{{ st2ha_keys_list }}"
+
+- name: "Register StackStorm pack content (only run on one host on purpose)"
+  become: yes
+  run_once: true
+  shell: "/opt/stackstorm/st2/bin/st2ctl reload --register-all"

@@ -17,7 +17,7 @@
 - [x] `st2chatops` on controller
 - [x] `st2notifier` on controller
 - [x] ability to disable certain services (st2ctl)
-- [ ] `st2timer` on controller
+- [x] `st2timersservice` on controller
 - [ ] Pack management workflows
 - [ ] backup workflows
 - [ ] monitoring
@@ -98,6 +98,18 @@ Start up the Vagrant VMs:
 vagrant up
 ```
 
+### Datastore encryption key
+
+When the `st2ha` playbook is run, it checks for and generates a StackStorm encryption
+key, placing it in `files/st2/datastore.json`.
+
+If you already have a datastore encryption key, simply create the directory `files/st2`
+and place your `datastore.json` file in there. Our role checks for the existence of this
+file and will use the existing key if it already exists.
+
+This key will be copied over to the hosts during the `stackstorm-workers.yaml` 
+and `stackstorm-controllers.yaml` playbooks as part of the `StackStorm.st2` role.
+
 ### Distributing CA certificates
 
 The `BlueCycleOps.ssl` role is able to distribute a CA certificate to all of the
@@ -129,3 +141,38 @@ ansible-playbook -i inventories -l controllers stackstorm-controller.yml
 ```shell
 ansible-playbook -i inventories -l workers stackstorm-worker.yml
 ```
+
+### Deploying packs to workers
+
+```shell
+ansible-playbook -i inventories -l workers stackstorm-packs-deploy.yml
+```
+
+#### Deploying pack configs
+
+At some point it will be necessary to populate pack configs on the StackStorm workers.
+On the worker nodes, these files reside in the `/opt/stackstorm/configs` directory.
+We support populating these configs!
+
+Simply create your configs inside of `files/st2/configs` and all files within this directory
+will be copied over to the workers into the directory `/opt/stackstorm/configs` during
+the `stackstorm-packs-deploy.yml` playbook.
+
+#### Deploying datastore keys
+
+Often times during content deployment there will be a need to set values of some
+datastore keys. Our playbook `stackstorm-packs-deploy.yml` happily supports this use case.
+
+The deployment process works by copying the keys files in the `files/st2/keys` directory
+and importing them into the datastore using the `st2 key load` command.
+
+To take advatange of this, create either a YAML or JSON keys file in the format
+described in the [StackStorm Datastore docs](https://docs.stackstorm.com/datastore.html#loading-key-value-pairs-from-a-file)
+then place these files inside of `files/st2/keys`.
+
+Now, running the `stackstorm-packs-deploy.yml` playbook will copy these keys files and
+load them into the datastore.
+
+If you're interested in storing pre-encrypted values in your keys files, so they don't
+have to be stored unencrypted, this is fully supported using the pattern described
+in the [StackStorm docs](https://docs.stackstorm.com/datastore.html#storing-pre-encrypted-secrets)

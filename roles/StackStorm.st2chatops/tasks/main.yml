@@ -92,7 +92,7 @@
     ST2_AUTH_TOKEN: "{{ task_st2_token.stdout }}"
   when: task_st2_token.changed
   register: task_generated_api_key
-  # no_log: true
+  no_log: true
   tags: [st2chatops, skip_ansible_lint]
 
 - name: Add generated "st2_api_key" in st2chatops.env

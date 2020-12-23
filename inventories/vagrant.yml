@@ -12,6 +12,9 @@ all:
     # Username/password used by StackStorm standalone authentication
     st2_auth_username: st2admin
     st2_auth_password: Ch@ngeMe
+    st2ha_packs:
+      - https://github.com/StackStorm-Exchange/stackstorm-bolt
+      - vsphere
 
   children:
     controllers:

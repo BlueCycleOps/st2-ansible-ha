@@ -1,0 +1,34 @@
+---
+- name: "Create temporary file for StackStorm keys {{ st2ha_keys_file }}"
+  become: yes
+  tempfile:
+    state: file
+    path: /opt/stackstorm
+    suffix: "{{ st2ha_keys_file | basename }}"
+  register: st2ha_keys_tempfile
+  run_once: true
+
+- name: "Copy StackStorm keys {{ st2ha_keys_file }}"
+  become: yes
+  copy:
+    src: "{{ st2ha_keys_file }}"
+    dest: "{{ st2ha_keys_tempfile.path }}"
+    mode: 0640
+    owner: st2
+    group: root
+  when: st2ha_keys_tempfile.path is defined
+  run_once: true
+
+- name: "Load StackStorm keys {{ st2ha_keys_file }}"
+  become: yes
+  shell: "/opt/stackstorm/st2/bin/st2 key load {{ st2ha_keys_tempfile.path }}"
+  when: st2ha_keys_tempfile.path is defined
+  run_once: true
+
+- name: "Delete temporary file {{ st2ha_keys_file }}"
+  become: yes
+  file:
+    path: "{{ st2ha_keys_tempfile.path }}"
+    state: absent
+  when: st2ha_keys_tempfile.path is defined
+  run_once: true
