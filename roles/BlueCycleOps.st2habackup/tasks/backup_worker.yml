@@ -1,0 +1,10 @@
+---
+- name: Backup StackStorm worker files
+  archive:
+    path: "{{ st2ha_backup_worker_paths }}"
+    dest: "{{ st2ha_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}/stackstorm_{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+    owner: root
+    group: root
+    mode: 0640
+  become: yes
+

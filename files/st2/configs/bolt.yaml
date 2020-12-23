@@ -1,0 +1,16 @@
+---
+host_key_check: false
+ssl: true
+ssl_verify: false
+modulepath: "/opt/encore/puppet:/etc/puppetlabs/code/environment/production"
+
+credentials:
+  linux:
+    user: "{{ st2kv.system.linux.username }}"
+    password: "{{ st2kv.system.linux.password | decrypt_kv }}"
+  linux_template:
+    user: "{{ st2kv.system.linux.template_username }}"
+    password: "{{ st2kv.system.linux.template_password | decrypt_kv  }}"
+  windows:
+    user: "{{ st2kv.system.ad.username }}"
+    password: "{{ st2kv.system.ad.password | decrypt_kv }}"

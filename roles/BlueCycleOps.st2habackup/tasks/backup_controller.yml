@@ -1,0 +1,14 @@
+---
+- name: Backup MongoDB
+  shell: "mongodump -u 'admin' -p '{{ st2ha_mongodb_password }}' --quiet --gzip --archive='{{ st2ha_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}/mongodb_dump_{{ ansible_date_time.iso8601_basic_short }}.gzip.archive'"
+  become: yes
+
+- name: Backup StackStorm controller files
+  archive:
+    path: "{{ st2ha_backup_controller_paths }}"
+    dest: "{{ st2ha_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}/stackstorm_{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+    owner: root
+    group: root
+    mode: 0640
+  become: yes
+

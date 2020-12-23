@@ -1,0 +1,6 @@
+---
+- name: nick2
+  value: 'blah'
+- name: nick_password
+  value: test
+  secret: true

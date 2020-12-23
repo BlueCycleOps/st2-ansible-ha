@@ -18,8 +18,8 @@
 - [x] `st2notifier` on controller
 - [x] ability to disable certain services (st2ctl)
 - [x] `st2timersservice` on controller
-- [ ] Pack management workflows
-- [ ] backup workflows
+- [x] Pack management workflows
+- [x] backup workflows
 - [ ] monitoring
 - [ ] Ansible Collections formatting
 - [ ] Makefile (or similar) to setup "all of the things"
@@ -176,3 +176,52 @@ load them into the datastore.
 If you're interested in storing pre-encrypted values in your keys files, so they don't
 have to be stored unencrypted, this is fully supported using the pattern described
 in the [StackStorm docs](https://docs.stackstorm.com/datastore.html#storing-pre-encrypted-secrets)
+
+### StackStorm Backups
+
+#### Perform a full backup
+
+```shell
+ansible-playbook -i inventories -l workers,controllers stackstorm-backup.yml
+```
+
+This will create a directory on each host `/opt/stackstorm/backups/2020xxx` where the last
+part is the date/time the backup was performed.
+
+Within that directory will contain the following files
+```
+# Controller - Dump of the MongoDB database 
+mongodb_dump_2020xxx.gzip.archive
+
+# Controller - Archive of the important StackStorm files
+#  /etc/st2 - contains the stackstorm core config along with the datastore encryption key
+#  /opt/stackstorm/chatops/st2chatops.env - contains the ChatOps config
+stackstorm_2020xxx.tar.gz
+
+# Worker - Archive of the important StackStorm files
+#  /etc/st2 - contains the stackstorm core config along with the datastore encryption key
+#  /opt/stackstorm/configs - contains the pack configs
+#  /opt/stackstorm/packs - contains the pack content itself
+#  /opt/stackstorm/virtualenvs - contains the pack virtualenvs
+stackstorm_2020xxx.tar.gz
+```
+
+
+#### Restoring from a backup
+
+MongoDB
+```shell
+mongorestore -u admin -p 'xxx' --drop --gzip --archive=/opt/stackstorm/backups/2020xxx/mongodb_dump_2020xxx.gzip.archive
+```
+
+StackStorm
+```shell
+st2ctl stop
+cd /opt/stackstorm/backups/2020xxx
+tar -xvf stackstorm_2020xxx.tar.gz
+/bin/cp -rf etc /
+/bin/cp -rf opt /
+st2ctl start
+# only need to do this on one worker
+st2ctl reload --register-all
+```

@@ -1,0 +1,5 @@
+---
+- name: Backup a StackStorm HA deployment
+  hosts: all
+  roles:
+    - BlueCycleOps.st2habackup

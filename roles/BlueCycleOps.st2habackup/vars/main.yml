@@ -1,0 +1,4 @@
+---
+st2ha_hosts_all: "{{ groups['all'] }}"
+st2ha_hosts_workers: "{{ groups['workers'] }}"
+st2ha_hosts_controllers: "{{ groups['controllers'] }}"

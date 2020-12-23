@@ -1,0 +1,27 @@
+---
+
+- name: "Create {{ st2ha_backup_path }} directory"
+  become: yes
+  file:
+    path: "{{ st2ha_backup_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: "Create {{ st2ha_backup_path }}/{{ ansible_date_time.iso8601_basic_short }} directory"
+  become: yes
+  file:
+    path: "{{ st2ha_backup_path }}/{{ ansible_date_time.iso8601_basic_short }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Backup the StackStorm Controller
+  include_tasks: backup_controller.yml
+  when: st2ha_node_type == 'controller'
+
+- name: Backup the StackStorm Worker
+  include_tasks: backup_worker.yml
+  when: st2ha_node_type == 'worker'
