@@ -4,18 +4,23 @@ st2ha_backup_path: /opt/stackstorm/backups
 
 # st2 paths to backup on a controller
 #  /etc/st2 - covers the stackstorm core config along with the datastore encryption key
+#  /etc/nginx - covers the nginx configs
 #  /opt/stackstorm/chatops/st2chatops.env - covers the ChatOps config
 st2ha_backup_controller_paths:
   - /etc/st2
+  - /etc/nginx
   - /opt/stackstorm/chatops/st2chatops.env
 
 # st2 paths to backup on a worker
 #  /etc/st2 - covers the stackstorm core config along with the datastore encryption key
+#  /etc/nginx - covers the nginx configs
 #  /opt/stackstorm/configs - covers the pack configs
 #  /opt/stackstorm/packs - covers the pack content itself
 #  /opt/stackstorm/virtualenvs - covers the pack virtualenvs
 st2ha_backup_worker_paths:
   - /etc/st2
+  - /etc/nginx/sites-available
+  - /etc/nginx/sites-enabled
   - /opt/stackstorm/configs
   - /opt/stackstorm/packs
   - /opt/stackstorm/virtualenvs

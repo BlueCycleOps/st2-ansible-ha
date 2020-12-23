@@ -195,11 +195,13 @@ mongodb_dump_2020xxx.gzip.archive
 
 # Controller - Archive of the important StackStorm files
 #  /etc/st2 - contains the stackstorm core config along with the datastore encryption key
+#  /etc/nginx - contains the nginx configs
 #  /opt/stackstorm/chatops/st2chatops.env - contains the ChatOps config
 stackstorm_2020xxx.tar.gz
 
 # Worker - Archive of the important StackStorm files
 #  /etc/st2 - contains the stackstorm core config along with the datastore encryption key
+#  /etc/nginx - contains the nginx configs
 #  /opt/stackstorm/configs - contains the pack configs
 #  /opt/stackstorm/packs - contains the pack content itself
 #  /opt/stackstorm/virtualenvs - contains the pack virtualenvs
