@@ -1,0 +1,22 @@
+---
+- name: redhat | Adding InfluxDB Repo
+  yum_repository:
+    name: influxdb
+    baseurl: "{{ influxdb_redhat_repo }}"
+    description: InfluxDB
+    gpgcheck: true
+    gpgkey: "{{ influxdb_redhat_repo_key }}"
+    enabled: true
+    priority: 90
+    state: present
+  become: true
+  when: ansible_distribution != "Fedora"
+
+- name: redhat | Installing InfluxDB
+  yum:
+    name: influxdb
+    state: present
+  become: true
+  register: result
+  until: result is successful
+  when: ansible_distribution != "Fedora"

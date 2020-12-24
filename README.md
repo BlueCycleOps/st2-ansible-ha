@@ -21,6 +21,16 @@
 - [x] Pack management workflows
 - [x] backup workflows
 - [ ] monitoring
+  - [x] grafana
+    - [ ] dashboards
+  - [x] influxdb
+    - [x] influxdb auth
+  - [ ] telegraf agent
+    - [x] base
+    - [ ] mongod
+    - [ ] rabbitmq
+    - [ ] nginx
+    - [ ] stackstorm (statsd)
 - [ ] Ansible Collections formatting
 - [ ] Makefile (or similar) to setup "all of the things"
   - virtualenv
@@ -80,11 +90,7 @@ pip install ansible
 
 ```shell
 # collections setup
-ansible-galaxy collection install community.mongodb community.rabbitmq ansible.posix geerlingguy.redis
-
-# roles setup
-ansible-galaxy install geerlingguy.redis
-
+ansible-galaxy collection install community.general community.mongodb community.rabbitmq ansible.posix
 ```
 
 ### Vagrant Setup
@@ -130,6 +136,7 @@ cp xxx.crt yyy.pem files/ssl/ca/
 
 Finally, run the playbooks and those CA certificates will be pushed to the hosts!
 
+
 ### Provisioning the controller
 
 ```shell
@@ -140,6 +147,12 @@ ansible-playbook -i inventories -l controllers stackstorm-controller.yml
 
 ```shell
 ansible-playbook -i inventories -l workers stackstorm-worker.yml
+```
+
+### Provisioning monitoring
+
+```shell
+ansible-playbook -i inventories -l monitoring stackstorm-monitoring.yml
 ```
 
 ### Deploying packs to workers
@@ -226,4 +239,17 @@ tar -xvf stackstorm_2020xxx.tar.gz
 st2ctl start
 # only need to do this on one worker
 st2ctl reload --register-all
+```
+
+
+### Monitoring
+
+Configuring the monitoring server (InfluxDB + Grafana)
+```shell
+ansible-playbook -i inventories -l monitoring stackstorm-monitoring.yml
+```
+
+Configuring the StackStorm servers with monitoring agents (Telegraf)
+```shell
+ansible-playbook -i inventories -l controllers,workers stackstorm-telegraf.yml
 ```

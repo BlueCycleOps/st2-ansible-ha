@@ -1,0 +1,15 @@
+---
+# tasks file for ansible-influxdb
+- include_tasks: set_facts.yml
+
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- include_tasks: redhat.yml
+  when: ansible_os_family == "RedHat"
+
+- include_tasks: config.yml
+  when: influxdb_config|bool
+
+- include_tasks: config_db.yml
+  when: influxdb_config_databases|bool

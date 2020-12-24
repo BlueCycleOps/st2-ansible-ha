@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  description: Install telegraf monitoring for ST2 HA
+  author: BlueCycleOps
+  company: BlueCycleOps
+  license: Apache 2.0
+  min_ansible_version: 2.5
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - xenial
+    - name: EL
+      versions:
+        - 7
+        - 8
+  galaxy_tags:
+    - system
+    - stackstorm
+    - st2
+    - automation
+    - remediation
+    - devops
+    - ha

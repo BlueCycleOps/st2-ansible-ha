@@ -1,0 +1,123 @@
+---
+- name: Deploy monitoring stack (InfluxDB, Grafana)
+  hosts: all
+  tasks:
+    # needed for influxdb role for some reason
+    - package:
+        name: python3-pip
+        state: present
+      become:  yes
+    - include_role:
+        name: mrlesmithjr.influxdb
+        apply:
+          become: yes
+          vars:
+            influxdb_http:
+              # Determines whether HTTP authentication is enabled.
+              auth_enabled: true
+              # The bind address used by the HTTP service.
+              bind_address: ""
+              # The bind port used by the HTTP service.
+              bind_port: 8086
+              # The path of the unix domain socket.
+              bind_socket: /var/run/influxdb.sock
+              # Determines whether HTTP endpoint is enabled.
+              enabled: true
+              https_certificate: /etc/ssl/influxdb.pem
+              # Determines whether HTTPS is enabled.
+              https_enabled: false
+              # Use a separate private key location.
+              https_private_key: null
+              # Determines whether HTTP request logging is enabled
+              log_enabled: true
+              # The maximum number of HTTP connections that may be open at once.  New
+              # connections that would exceed this limit are dropped.  Setting this value
+              # to 0 disables the limit.
+              max_connection_limit: 0
+              # The default chunk size for result sets that should be chunked.
+              max_row_limit: 0
+              # Determines whether the pprof endpoint is enabled.  This endpoint is used for
+              # troubleshooting and monitoring.
+              pprof_enabled: true
+              # The default realm sent back when issuing a basic auth challenge.
+              realm: InfluxDB
+              # Not implemented yet
+              # relay:
+              #   - name: local1
+              #     location: http://127.0.0.1:8086/write
+              #     timeout: 10s
+              # The JWT auth shared secret to validate requests using JSON web tokens.
+              shared_secret: ""
+              # Enable http service over unix domain socket
+              unix_socket_enabled: false
+              # Determines whether detailed write logging is enabled.
+              write_tracing: false
+    - name: Create InfluxDB admin user
+      community.general.influxdb_user:
+        user_name: "{{ st2ha_influxdb_admin_username }}"
+        user_password:  "{{ st2ha_influxdb_admin_password }}"
+        login_username: "{{ st2ha_influxdb_admin_username }}"
+        login_password: "{{ st2ha_influxdb_admin_password }}"
+        admin: true
+        grants:
+          - database: 'site'
+            privilege: 'ALL PRIVILEGES'
+    - name: Create database using custom credentials
+      community.general.influxdb_database:
+        username: "{{ st2ha_influxdb_admin_username }}"
+        password: "{{ st2ha_influxdb_admin_password }}"
+        database_name: "{{ st2ha_influxdb_database }}"
+    - name: Create InfluxDB telegraf database
+      community.general.influxdb_user:
+        user_name: "{{ st2ha_influxdb_telegraf_username }}"
+        user_password:  "{{ st2ha_influxdb_telegraf_password }}"
+        login_username: "{{ st2ha_influxdb_admin_username }}"
+        login_password: "{{ st2ha_influxdb_admin_password }}"
+        grants:
+          - database: "{{ st2ha_influxdb_database }}"
+            privilege: 'ALL'
+    - name: Create InfluxDB grafana user
+      community.general.influxdb_user:
+        user_name: "{{ st2ha_influxdb_grafana_username }}"
+        user_password:  "{{ st2ha_influxdb_grafana_password }}"
+        login_username: "{{ st2ha_influxdb_admin_username }}"
+        login_password: "{{ st2ha_influxdb_admin_password }}"
+        grants:
+          - database: "{{ st2ha_influxdb_database }}"
+            privilege: 'READ'
+    - name: Allow InfluxDB (8086/tcp) through the firewall
+      become: yes
+      ansible.posix.firewalld:
+        port: 8086/tcp
+        immediate: true
+        permanent: true
+        state: enabled
+    - include_role:
+        name: cloudalchemy.grafana
+        apply:
+          become: yes
+          vars:
+            grafana_security:
+              admin_user: "{{ st2ha_grafana_admin_username }}"
+              admin_password: "{{ st2ha_grafana_admin_password }}"
+            grafana_datasources:
+              - name: InfluxDB_v1
+                type: influxdb
+                access: proxy
+                database: "{{ st2ha_influxdb_database }}"
+                user: "{{ st2ha_influxdb_grafana_username }}"
+                password: "{{ st2ha_influxdb_grafana_password }}"
+                url: http://localhost:8086
+                jsonData:
+                  httpMode: GET
+    - name: Allow Grafana (3000/tcp) through the firewall
+      become: yes
+      ansible.posix.firewalld:
+        port: 3000/tcp
+        immediate: true
+        permanent: true
+        state: enabled
+# TODO
+# - Grafana dashboards
+# - Telegraf agent
+# - Telegraf statsd

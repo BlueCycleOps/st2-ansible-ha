@@ -15,6 +15,16 @@ all:
     st2ha_packs:
       - https://github.com/StackStorm-Exchange/stackstorm-bolt
       - vsphere
+    st2ha_influxdb_host: st2mon
+    st2ha_influxdb_database: 'telegraf'
+    st2ha_influxdb_admin_username: admin
+    st2ha_influxdb_admin_password: Ch@ngeMe
+    st2ha_influxdb_telegraf_username: telegraf
+    st2ha_influxdb_telegraf_password: Ch@ngeMe
+    st2ha_influxdb_grafana_username: grafana
+    st2ha_influxdb_grafana_password: Ch@ngeMe
+    st2ha_grafana_admin_username: admin
+    st2ha_grafana_admin_password: Ch@ngeMe
 
   children:
     controllers:
@@ -38,4 +48,13 @@ all:
           ansible_host: 192.168.121.102
           ansible_user: vagrant
           ansible_ssh_private_key_file: .vagrant/machines/st2wrk2/libvirt/private_key
+  
+    monitoring:
+      vars:
+        st2ha_node_type: 'monitoring'
+      hosts:
+        st2mon:
+          ansible_host: 192.168.121.103
+          ansible_user: vagrant
+          ansible_ssh_private_key_file: .vagrant/machines/st2mon/libvirt/private_key
   

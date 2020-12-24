@@ -1,0 +1,14 @@
+---
+
+- name: Setup Telegraf varaibles for StackStorm Controller
+  include_tasks: telegraf_controller.yml
+  when: st2ha_node_type == 'controller'
+
+- name: Setup Telegraf varaibles for StackStorm Worker
+  include_tasks: telegraf_worker.yml
+  when: st2ha_node_type == 'worker'
+
+- include_role:
+    name: dj-wasabi.telegraf
+    apply:
+      become: true

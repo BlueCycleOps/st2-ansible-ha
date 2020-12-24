@@ -1,0 +1,41 @@
+---
+
+- set_fact:
+    telegraf_agent_output:
+      - type: influxdb
+        config:
+          - urls = ["http://{{ st2ha_influxdb_host }}:8086"]
+          - database = "{{ st2ha_influxdb_database }}"
+          - username = "{{ st2ha_influxdb_telegraf_username }}"
+          - password = "{{ st2ha_influxdb_telegraf_password }}"
+    telegraf_plugins_default:
+      - plugin: cpu
+        config:
+          - percpu = true
+          - totalcpu = true
+          - fielddrop = ["time_*"]
+      - plugin: conntrack
+        config:
+          - files = ["ip_conntrack_count","ip_conntrack_max", "nf_conntrack_count","nf_conntrack_max"]
+          - dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]
+      - plugin: disk
+      - plugin: diskio
+      - plugin: kernel
+      - plugin: mem
+      - plugin: processes
+      - plugin: swap
+      - plugin: system
+      - plugin: net
+      - plugin: netstat
+      - plugin: nstat
+      - plugin: interrupts
+      - plugin: linux_sysctl_fs
+      - plugin: internal
+        config:
+          - collect_memstats = true
+
+# TODO
+# - MongoDB
+# - RabbitMQ
+# - nginx
+# - StackStorm/statsd
