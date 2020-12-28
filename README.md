@@ -22,15 +22,17 @@
 - [x] backup workflows
 - [ ] monitoring
   - [x] grafana
-    - [ ] dashboards
+    - [ ] import system dashboard
+    - [ ] stackstorm dashboard
   - [x] influxdb
     - [x] influxdb auth
   - [ ] telegraf agent
-    - [x] base
+    - [x] system
     - [ ] mongod
     - [ ] rabbitmq
     - [ ] nginx
     - [ ] stackstorm (statsd)
+  - [ ] integrate telegraf install/config into controllers and workers playbook
 - [ ] Ansible Collections formatting
 - [ ] Makefile (or similar) to setup "all of the things"
   - virtualenv

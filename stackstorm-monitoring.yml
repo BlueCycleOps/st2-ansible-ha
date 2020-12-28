@@ -119,5 +119,3 @@
         state: enabled
 # TODO
 # - Grafana dashboards
-# - Telegraf agent
-# - Telegraf statsd

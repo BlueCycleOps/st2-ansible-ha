@@ -3,3 +3,5 @@
   hosts: all
   roles:
     - BlueCycleOps.st2hatelegraf
+
+# - Telegraf statsd

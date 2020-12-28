@@ -30,6 +30,12 @@
         db_name: "{{ st2ha_mongodb_database }}"
       messaging:
         url: "amqp://{{ st2ha_rabbitmq_username }}:{{ st2ha_rabbitmq_password }}@{{ st2ha_controller_host }}:5672/"
+      metrics:
+        driver: statsd
+        # telegraf is configured as a statsd server, it will receive the statsd metrics
+        # and push them to influxdb
+        host: 127.0.0.1
+        port: 8125
       timersengine:
         enable: 'True'
         # for whatever reason, you have to use this timezone, sorry it's a bug

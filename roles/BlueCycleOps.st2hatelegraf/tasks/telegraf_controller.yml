@@ -33,6 +33,24 @@
       - plugin: internal
         config:
           - collect_memstats = true
+      - plugin: statsd
+        config:
+          - protocol = "udp"
+          - service_address = ":8125"
+          - metric_separator = '.'
+          ## Reset gauges every interval (default=true)
+          - delete_gauges = false
+          ## Reset counters every interval (default=true)
+          - delete_counters = false
+          ## Reset sets every interval (default=true)
+          - delete_sets = false
+          ## Reset timings & histograms every interval (default=true)
+          - delete_timings = true
+          # Tell telegraf to pull out the status code from these metrics names and
+          # assign it to the status_code field on the metric
+          - templates = ["st2.action.executions.* measurement.measurement.measurement.status", "st2.action.*.*.executions measurement.measurement.pack.action.field", "st2.amqp.pool_publisher.publish_with_retries.* measurement.measurement.measurement.measurement.field", "st2.amqp.publish.* measurement.measurement.measurement.field", "st2.*.request.method.* measurement.measurement.measurement.measurement.method", "st2.*.request.path.* measurement.measurement.measurement.measurement.path", "st2.*.response.status.* measurement.measurement.measurement.measurement.status", "st2.trigger.*.*.processed measurement.measurement.pack.name.flag", "st2.trigger.*.*.*.*.processed measurement.measurement.pack.name.name.name.flag", "st2.notifier.* measurement.measurement.notifier", "st2.orquesta.*.*, measurement.measurement.field.measurement" ]
+
+
 
 # TODO
 # - MongoDB
