@@ -13,6 +13,10 @@
     rabbitmq_users:
       - user: "{{ st2ha_rabbitmq_username }}"
         password: "{{ st2ha_rabbitmq_password }}"
+        # setup this user for RabbitMQ telegraf monitoring
+        # https://www.rabbitmq.com/management.html#permissions
+        # CSV string here
+        tags: administrator
         permissions:
           - vhost: "{{ st2ha_rabbitmq_vhost }}"
             configure_priv: .*

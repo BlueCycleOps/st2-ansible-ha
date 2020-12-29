@@ -2,6 +2,7 @@
 - name: Install StackStorm Telegraf monitoring
   hosts: all
   roles:
+    - BlueCycleOps.st2ha
     - BlueCycleOps.st2hatelegraf
 
 # - Telegraf statsd

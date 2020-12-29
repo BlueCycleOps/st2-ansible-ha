@@ -1,6 +1,7 @@
 ---
 
 - set_fact:
+    telegraf_agent_version: 1.17.0
     telegraf_agent_output:
       - type: influxdb
         config:
@@ -42,7 +43,7 @@
           ## Reset gauges every interval (default=true)
           - delete_gauges = false
           ## Reset counters every interval (default=true)
-          - delete_counters = false
+          - delete_counters = true
           ## Reset sets every interval (default=true)
           - delete_sets = false
           ## Reset timings & histograms every interval (default=true)
@@ -50,6 +51,24 @@
           # Tell telegraf to pull out the status code from these metrics names and
           # assign it to the status_code field on the metric
           - templates = ["st2.action.executions.* measurement.measurement.measurement.status", "st2.action.*.*.executions measurement.measurement.pack.action.field", "st2.amqp.pool_publisher.publish_with_retries.* measurement.measurement.measurement.measurement.field", "st2.amqp.publish.* measurement.measurement.measurement.field", "st2.*.request.method.* measurement.measurement.measurement.measurement.method", "st2.*.request.path.* measurement.measurement.measurement.measurement.path", "st2.*.response.status.* measurement.measurement.measurement.measurement.status", "st2.rule.*.*.* measurement.measurement.pack.rule.field", "st2.rule.* measurement.measurement.field", "st2.trigger.*.*.processed measurement.measurement.pack.name.flag", "st2.trigger.*.*.*.*.processed measurement.measurement.pack.name.name.name.flag", "st2.notifier.* measurement.measurement.notifier", "st2.orquesta.*.*, measurement.measurement.field.measurement" ]
+      - plugin: nginx
+        config:
+          - urls = ["https://localhost/basic_status"]
+          - insecure_skip_verify = true
+      - plugin: logparser
+        config:
+          - files = ["/var/log/nginx/access.log", "/var/log/nginx/ssl-st2webui.access.log", "/var/log/nginx/st2webui.access.log"]
+          - from_beginning = true
+          - name_override = "nginx_access_log"
+          - "[inputs.logparser.grok]"
+          - '  patterns = ["%{COMBINED_LOG_FORMAT}"]'
+
+- set_fact:
+    telegraf_plugins_default: "{{ telegraf_plugins_default + [ {\"plugin\": \"procstat\", \"config\": [\"pattern = \" + '\"' + item + '\"' + \"\"] } ] }}"
+  with_items: "{{ st2_services }}"
+
+- debug:
+    msg: "telegraf plugin defaults = {{ telegraf_plugins_default }}"
 
 # TODO
 # - nginx

@@ -78,3 +78,12 @@
   with_items:
     - amqp
     - amqps
+    
+- name: Allow RabbitMQ Management Plugin through Firewall
+  become: yes
+  ansible.posix.firewalld:
+    port: 15672/tcp
+    immediate: true
+    permanent: true
+    state: enabled
+  when: "{{ 'rabbitmq_management' in rabbitmq_plugins }}"

@@ -255,3 +255,23 @@ Configuring the StackStorm servers with monitoring agents (Telegraf)
 ```shell
 ansible-playbook -i inventories -l controllers,workers stackstorm-telegraf.yml
 ```
+
+
+#### Dashboards
+MongoDB - https://grafana.com/grafana/dashboards/11108
+Nginx - https://grafana.com/grafana/dashboards/5063
+Telegraf System - https://grafana.com/grafana/dashboards/928
+RabbitMQ - TODO
+StackStorm - BlueCycleOps Custom
+
+
+
+deploy.yml
+ops.yml
+
+localhost/monitor or something (nginx) to grafana
+
+azure monitoring
+
+
+terraform -> ansible -> 

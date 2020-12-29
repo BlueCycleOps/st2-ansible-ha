@@ -110,6 +110,7 @@
                 url: http://localhost:8086
                 jsonData:
                   httpMode: GET
+            grafana_dashboards_dir: files/grafana
     - name: Allow Grafana (3000/tcp) through the firewall
       become: yes
       ansible.posix.firewalld:
