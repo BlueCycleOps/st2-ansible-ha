@@ -6,10 +6,22 @@
   when: ansible_facts.os_family == "RedHat"
   tags: epel
 
+# - name: Install EPEL repo
+#   become: yes
+#   yum:
+#     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts.distribution_major_version }}.noarch.rpm"
+#     state: present
+#   register: _task
+#   retries: 5
+#   delay: 3
+#   until: _task is succeeded
+#   when: ansible_facts.os_family == "RedHat" and not epel_installed.stat.exists
+#   tags: epel
+
 - name: Install EPEL repo
   become: yes
-  yum:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts.distribution_major_version }}.noarch.rpm"
+  package:
+    name: epel-release
     state: present
   register: _task
   retries: 5

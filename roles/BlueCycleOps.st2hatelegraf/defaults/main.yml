@@ -1,3 +1,9 @@
 ---
 influxdb_redhat_repo: 'https://repos.influxdata.com/rhel/$releasever/$basearch/stable'
 influxdb_redhat_repo_key: 'https://repos.influxdata.com/influxdb.key'
+
+# Path to local scripts to copy over to telegraf
+st2ha_telegraf_scripts_src: files/telegraf/
+
+# Path to local scripts to copy over to telegraf
+st2ha_telegraf_scripts_dest: /etc/telegraf/scripts.d

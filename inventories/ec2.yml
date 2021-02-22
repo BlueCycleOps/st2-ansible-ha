@@ -1,0 +1,72 @@
+---
+all:
+  vars:
+    st2ha_controller_host: st2ctr
+    st2ha_mongodb_database: st2
+    st2ha_mongodb_username: stackstorm
+    st2ha_mongodb_password: Ch@ngeMe1
+    st2ha_rabbitmq_username: stackstorm
+    st2ha_rabbitmq_password: Ch@ngeMe1
+    st2ha_rabbitmq_vhost: '/'
+    st2ha_redis_password: Ch@ngeMe1
+    # Username/password used by StackStorm standalone authentication
+    st2_auth_username: st2admin
+    st2_auth_password: Ch@ngeMe
+    st2ha_packs:
+      - git@github.com:SOD-Exchange/sod-aws_cloudtrail.git
+      - git@github.com:SOD-Exchange/sod-aws_guardduty.git
+      - git@github.com:SOD-Exchange/sod-aws_inspector.git
+      - git@github.com:SOD-Exchange/sod-cisco_meraki.git=UpdatingMappings
+      - git@github.com:SOD-Exchange/sod-cisco_umbrella.git
+      - git@github.com:SOD-Exchange/sod-devo.git
+      - git@github.com:SOD-Exchange/sod-ms_atp.git=AddingCustomers
+      - git@github.com:SOD-Exchange/sod-ms_azure_ad.git
+      - git@github.com:SOD-Exchange/sod-ms_o365.git
+    st2ha_influxdb_host: st2mon
+    st2ha_influxdb_database: 'telegraf'
+    st2ha_influxdb_admin_username: admin
+    st2ha_influxdb_admin_password: Ch@ngeMe
+    st2ha_influxdb_telegraf_username: telegraf
+    st2ha_influxdb_telegraf_password: Ch@ngeMe
+    st2ha_influxdb_grafana_username: grafana
+    st2ha_influxdb_grafana_password: Ch@ngeMe
+    st2ha_grafana_admin_username: admin
+    st2ha_grafana_admin_password: Ch@ngeMe
+    st2ha_grafana_smtp_enabled:  true
+    st2ha_grafana_smtp_host: 172.22.1.124:25
+    st2ha_grafana_smtp_from_address: alert@grafana.alerts.local
+    st2ha_grafana_alerts_email_address: alert@grafana.alerts.local
+
+  children:
+    controllers:
+      vars:
+        st2ha_node_type: 'controller'
+      hosts:
+        st2ctr:
+          ansible_host: 10.16.11.100
+          ansible_user: centos
+          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+    
+    workers:
+      vars:
+        st2ha_node_type: 'worker'
+      hosts:
+        st2wrk1:
+          ansible_host: 10.16.11.101
+          ansible_user: centos
+          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+        st2wrk2:
+          ansible_host: 10.16.11.102
+          ansible_user: centos
+          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+
+    monitoring:
+      vars:
+        st2ha_node_type: 'monitoring'
+      hosts:
+        st2mon:
+          ansible_host: 10.16.11.99
+          ansible_user: centos
+          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+  
+# boolean to disable chatops service

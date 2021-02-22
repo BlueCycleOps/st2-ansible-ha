@@ -24,10 +24,10 @@
   tags: st2ha
   when: st2ha_node_type == 'worker'
 
-- name: Allow HTTPS traffic through the firewall
-  become: yes
-  ansible.posix.firewalld:
-    service: https
-    immediate: true
-    permanent: true
-    state: enabled
+# - name: Allow HTTPS traffic through the firewall
+#   become: yes
+#   ansible.posix.firewalld:
+#     service: https
+#     immediate: true
+#     permanent: true
+#     state: enabled

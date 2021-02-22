@@ -47,10 +47,10 @@
     apply:
       become: yes
 
-- name: Allow MongoDB through Firewall
-  become: yes
-  ansible.posix.firewalld:
-    service: mongodb
-    immediate: true
-    permanent: true
-    state: enabled
+# - name: Allow MongoDB through Firewall
+#   become: yes
+#   ansible.posix.firewalld:
+#     service: mongodb
+#     immediate: true
+#     permanent: true
+#     state: enabled

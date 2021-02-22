@@ -29,7 +29,7 @@
   - [ ] telegraf agent
     - [x] system
     - [ ] mongod
-    - [ ] rabbitmq
+    - [x] rabbitmq
     - [ ] nginx
     - [ ] stackstorm (statsd)
   - [ ] integrate telegraf install/config into controllers and workers playbook
@@ -42,6 +42,16 @@
 - [ ] Packer builder
 - [ ] inject SSL certs
   - where do we get these from? (see questions)
+- [ ] Monitoring (grafana + telegraf) systemd services up/down
+- [ ] Alerting configs for ServiceNow (and/or email)
+- [ ] Sensor Hash partitioning
+  - [sensorcontainer]
+    sensor_node_name = st2wrk1
+    partition_provider = name:hash, hash_ranges:MIN..2147483648
+  - [sensorcontainer]
+    sensor_node_name = st2wrk2
+    partition_provider = name:hash, hash_ranges:2147483648..MAX
+  - MIN=0 MAX=4294967296
 
 ## Thoughts/questions
 
@@ -155,6 +165,7 @@ ansible-playbook -i inventories -l workers stackstorm-worker.yml
 
 ```shell
 ansible-playbook -i inventories -l monitoring stackstorm-monitoring.yml
+ansible-playbook -i inventories -l controllers,workers stackstorm-telegraf.yml
 ```
 
 ### Deploying packs to workers
@@ -275,3 +286,11 @@ azure monitoring
 
 
 terraform -> ansible -> 
+
+
+###############
+#  alerts
+- remove buttons or make them go somewhere
+- better info in the email
+
+- he wants "go restart carbonblack if it's down"

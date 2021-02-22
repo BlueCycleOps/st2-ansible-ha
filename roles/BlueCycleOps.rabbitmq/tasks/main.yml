@@ -12,6 +12,23 @@
   # Disable warning as yum doesn't support enable module
   tags: [rabbitmq, skip_ansible_lint]
 
+- name: Install erlang from packagecloud for RH 8
+  become: yes
+  no_log: yes
+  yum_repository:
+    name: rabbitmq-erlang
+    description: rabbitmq-erlang
+    baseurl: https://packagecloud.io/rabbitmq/erlang/el/{{ ansible_facts.distribution_major_version }}/$basearch
+    repo_gpgcheck: yes
+    gpgkey: "https://packagecloud.io/rabbitmq/erlang/gpgkey"
+    sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+    metadata_expire: 300
+    gpgcheck: no
+    enabled: yes
+    sslverify: yes
+  when: rabbitmq_on_el8
+  tags: rabbitmq
+
 - name: Install rabbit from packagecloud for RH 8
   become: yes
   no_log: yes
@@ -68,22 +85,22 @@
   when: rabbitmq_users or rabbitmq_absent_users
   include_tasks: rabbitmq_users.yml
 
-- name: Allow RabbitMQ/amqp through Firewall
-  become: yes
-  ansible.posix.firewalld:
-    service: "{{ item }}"
-    immediate: true
-    permanent: true
-    state: enabled
-  with_items:
-    - amqp
-    - amqps
+# - name: Allow RabbitMQ/amqp through Firewall
+#   become: yes
+#   ansible.posix.firewalld:
+#     service: "{{ item }}"
+#     immediate: true
+#     permanent: true
+#     state: enabled
+#   with_items:
+#     - amqp
+#     - amqps
     
-- name: Allow RabbitMQ Management Plugin through Firewall
-  become: yes
-  ansible.posix.firewalld:
-    port: 15672/tcp
-    immediate: true
-    permanent: true
-    state: enabled
-  when: "{{ 'rabbitmq_management' in rabbitmq_plugins }}"
+# - name: Allow RabbitMQ Management Plugin through Firewall
+#   become: yes
+#   ansible.posix.firewalld:
+#     port: 15672/tcp
+#     immediate: true
+#     permanent: true
+#     state: enabled
+#   when: "{{ 'rabbitmq_management' in rabbitmq_plugins }}"

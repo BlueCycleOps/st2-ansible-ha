@@ -8,6 +8,11 @@
   include_tasks: telegraf_worker.yml
   when: st2ha_node_type == 'worker'
 
+- include_role:
+    name: dj-wasabi.telegraf
+    apply:
+      become: true
+
 - name: Set Telegraf as the group for /var/log/nginx so it can read log files
   file:
     path: /var/log/nginx
@@ -22,8 +27,3 @@
     regexp: '^    create '
     line: '    create 0664 nginx telegraf'
   become: true
-
-- include_role:
-    name: dj-wasabi.telegraf
-    apply:
-      become: true

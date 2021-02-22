@@ -10,16 +10,20 @@
           - username = "{{ st2ha_influxdb_telegraf_username }}"
           - password = "{{ st2ha_influxdb_telegraf_password }}"
           - precision = "1us"
+    telegraf_global_tags:
+      - tag_name: st2role
+        tag_value: worker
     telegraf_plugins_default:
       - plugin: cpu
         config:
           - percpu = true
           - totalcpu = true
           - fielddrop = ["time_*"]
-      - plugin: conntrack
-        config:
-          - files = ["ip_conntrack_count","ip_conntrack_max", "nf_conntrack_count","nf_conntrack_max"]
-          - dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]
+      # firewalld isn't enabled in EC2 so it causes this to fail
+      # - plugin: conntrack
+      #   config:
+      #     - files = ["ip_conntrack_count","ip_conntrack_max", "nf_conntrack_count","nf_conntrack_max"]
+      #     - dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]
       - plugin: disk
       - plugin: diskio
       - plugin: kernel
@@ -32,6 +36,7 @@
       - plugin: nstat
       - plugin: interrupts
       - plugin: linux_sysctl_fs
+      - plugin: systemd_units
       - plugin: internal
         config:
           - collect_memstats = true
@@ -63,13 +68,60 @@
           - "[inputs.logparser.grok]"
           - '  patterns = ["%{COMBINED_LOG_FORMAT}"]'
 
+# get status of all the st2 services
 - set_fact:
     telegraf_plugins_default: "{{ telegraf_plugins_default + [ {\"plugin\": \"procstat\", \"config\": [\"pattern = \" + '\"' + item + '\"' + \"\"] } ] }}"
   with_items: "{{ st2_services }}"
 
+# get all of the running st2sensor instances
+- set_fact:
+    telegraf_plugins_default: "{{ telegraf_plugins_default + [ {\"plugin\": \"procstat\", \"config\": [\"pattern = \" + '\"sensor_wrapper.py\"', \"cmdline_tag = true\"] } ] }}"
+  
 - debug:
     msg: "telegraf plugin defaults = {{ telegraf_plugins_default }}"
 
-# TODO
-# - nginx
-# - StackStorm/statsd
+- name: Ensure /etc/telegraf has correct permissions
+  become: yes
+  file:
+    path: /etc/telegraf
+    state: directory
+    mode: 0755
+    owner: telegraf
+    group: telegraf
+    
+# save credentials so telegraf can call st2 CLI/API to get data
+- name: Create Telegraf st2 CLI configuration directory
+  become: yes
+  file:
+    path: /etc/telegraf/.st2
+    state: directory
+    mode: 0700
+    owner: telegraf
+    group: telegraf
+
+- name: Save st2 credentials in Telegraf CLI configuration file
+  become: yes
+  blockinfile:
+    dest: /etc/telegraf/.st2/config
+    create: yes
+    mode: 0600
+    owner: telegraf
+    group: telegraf
+    block: |
+      [credentials]
+      username = {{ st2_auth_username }}
+      password = {{ st2_auth_password }}
+
+# copy sensor metrics script
+- name: Copy telegraf st2 metrics scripts
+  become: yes
+  copy:
+    src: "{{ st2ha_telegraf_scripts_src }}"
+    dest: "{{ st2ha_telegraf_scripts_dest }}"
+    mode: 0700
+    owner: telegraf
+    group: telegraf
+
+# execute custom st2 telegraf scripts
+- set_fact:
+    telegraf_plugins_default: "{{ telegraf_plugins_default + [ {\"plugin\": \"exec\", \"config\": [\"commands = [\" + '\"' + st2ha_telegraf_scripts_dest + '/*\"]', \"data_format = \" + '\"influx\"'] } ] }}"

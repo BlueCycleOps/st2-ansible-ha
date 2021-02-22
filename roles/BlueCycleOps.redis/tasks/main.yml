@@ -4,11 +4,11 @@
     apply:
       become: yes
 
-- name: Allow Redis through Firewall
-  become: yes
-  ansible.posix.firewalld:
-    service: redis
-    immediate: true
-    permanent: true
-    state: enabled
+# - name: Allow Redis through Firewall
+#   become: yes
+#   ansible.posix.firewalld:
+#     service: redis
+#     immediate: true
+#     permanent: true
+#     state: enabled
 

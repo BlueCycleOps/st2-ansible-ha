@@ -85,13 +85,13 @@
         grants:
           - database: "{{ st2ha_influxdb_database }}"
             privilege: 'READ'
-    - name: Allow InfluxDB (8086/tcp) through the firewall
-      become: yes
-      ansible.posix.firewalld:
-        port: 8086/tcp
-        immediate: true
-        permanent: true
-        state: enabled
+    # - name: Allow InfluxDB (8086/tcp) through the firewall
+    #   become: yes
+    #   ansible.posix.firewalld:
+    #     port: 8086/tcp
+    #     immediate: true
+    #     permanent: true
+    #     state: enabled
     - include_role:
         name: cloudalchemy.grafana
         apply:
@@ -111,12 +111,27 @@
                 jsonData:
                   httpMode: GET
             grafana_dashboards_dir: files/grafana
-    - name: Allow Grafana (3000/tcp) through the firewall
-      become: yes
-      ansible.posix.firewalld:
-        port: 3000/tcp
-        immediate: true
-        permanent: true
-        state: enabled
+            grafana_smtp:
+              enabled: "{{ st2ha_grafana_smtp_enabled | default(False) }}"
+              host: "{{ st2ha_grafana_smtp_host }}"
+              from_address: "{{ st2ha_grafana_smtp_from_address }}"
+              skip_verify: true
+            grafana_alert_notifications:
+              notifiers:
+                - name: "{{ st2ha_grafana_alerts_email_address }}"
+                  type: email
+                  uid: email_channel_1
+                  is_default: true
+                  send_reminder: false
+                  settings:
+                    addresses: "{{ st2ha_grafana_alerts_email_address }}"
+              
+    # - name: Allow Grafana (3000/tcp) through the firewall
+    #   become: yes
+    #   ansible.posix.firewalld:
+    #     port: 3000/tcp
+    #     immediate: true
+    #     permanent: true
+    #     state: enabled
 # TODO
 # - Grafana dashboards

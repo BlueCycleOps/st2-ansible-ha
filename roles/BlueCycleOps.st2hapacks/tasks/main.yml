@@ -2,7 +2,7 @@
 
 - name: Install StackStorm packs
   become: yes
-  shell: "/opt/stackstorm/st2/bin/st2-pack-install {{ st2ha_packs | join(' ') }}"
+  shell: "/opt/stackstorm/st2/bin/st2-pack-install --force {{ st2ha_packs | join(' ') }}"
 
 - name: "Find all pack configs in {{ st2ha_pack_configs_path }}"
   find:
