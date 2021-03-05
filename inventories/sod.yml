@@ -46,7 +46,7 @@ all:
         st2ctr:
           ansible_host: 10.16.11.100
           ansible_user: centos
-          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
     
     workers:
       vars:
@@ -55,11 +55,11 @@ all:
         st2wrk1:
           ansible_host: 10.16.11.101
           ansible_user: centos
-          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
         st2wrk2:
           ansible_host: 10.16.11.102
           ansible_user: centos
-          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
 
     monitoring:
       vars:
@@ -68,6 +68,6 @@ all:
         st2mon:
           ansible_host: 10.16.11.99
           ansible_user: centos
-          ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
   
 # boolean to disable chatops service
