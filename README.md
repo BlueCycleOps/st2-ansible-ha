@@ -98,9 +98,7 @@
 python3 -m venv virtualenv
 source ./virtualenv/bin/activate
 pip install ansible
-```
 
-```shell
 # collections setup
 ansible-galaxy collection install community.general community.mongodb community.rabbitmq ansible.posix
 ```
@@ -172,6 +170,10 @@ ansible-playbook -i inventories -l controllers,workers stackstorm-telegraf.yml
 
 ```shell
 ansible-playbook -i inventories -l workers stackstorm-packs-deploy.yml
+
+
+# just for SOD
+ansible-playbook -i inventories/sod.yml -l workers stackstorm-packs-deploy.yml
 ```
 
 #### Deploying pack configs
