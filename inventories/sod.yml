@@ -17,12 +17,12 @@ all:
       - git@github.com:SOD-Exchange/sod-aws_guardduty.git
       - git@github.com:SOD-Exchange/sod-aws_inspector.git
       - git@github.com:SOD-Exchange/sod-carbonblack_cloud.git
-      - git@github.com:SOD-Exchange/sod-cisco_meraki.git=UpdatingMappings
+      - git@github.com:SOD-Exchange/sod-cisco_meraki.git
       - git@github.com:SOD-Exchange/sod-cisco_umbrella.git
       - git@github.com:SOD-Exchange/sod-devo.git
       - git@github.com:SOD-Exchange/sod-ms_atp.git
       - git@github.com:SOD-Exchange/sod-ms_azure_ad.git
-      - git@github.com:SOD-Exchange/sod-ms_o365.git=MoreCustomers
+      - git@github.com:SOD-Exchange/sod-ms_o365.git
       - git@github.com:SOD-Exchange/sod-duo.git
     st2ha_influxdb_host: st2mon
     st2ha_influxdb_database: 'telegraf'
