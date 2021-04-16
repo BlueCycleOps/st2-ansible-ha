@@ -4,7 +4,7 @@ st2_datastore_key: null
 # List of allowed SSL protocols (TLS versions)
 nginx_ssl_protocols:
   - 'TLSv1.2'
-  
+
 # List of allowed SSL Ciphers in nginx
 nginx_ssl_ciphers:
   - 'ECDHE-ECDSA-AES128-GCM-SHA256'
@@ -20,3 +20,9 @@ nginx_ssl_ciphers:
 
 # path to where the datastore key will be store on the ansible host
 st2ha_datastore_key_path: 'files/st2/datastore_key.json'
+
+# StackStorm garbage collector configs
+# TTLs are in Days
+st2ha_garbagecollector_action_executions_output_ttl: 30
+st2ha_garbagecollector_action_executions_ttl: 30
+st2ha_garbagecollector_trigger_instances_ttl: 30

@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1613006425796,
+  "iteration": 1613965074326,
   "links": [],
   "panels": [
     {
@@ -86,7 +86,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "message": "Systemd service on a StackStom controller is down!",
+        "message": "StackStorm service [${tag_name}] on host [${tag_host}] is down.",
         "name": "st2 controller services alert",
         "noDataState": "no_data",
         "notifications": []
@@ -342,7 +342,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "message": "Systemd service on a StackStom controller is down!",
+        "message": "StackStorm service [${tag_name}] on host [${tag_host}] is down.",
         "name": "st2 worker services alert",
         "noDataState": "no_data",
         "notifications": []
@@ -669,5 +669,5 @@
   "timezone": "",
   "title": "Systemd Services",
   "uid": "Gsgen4EGk",
-  "version": 21
+  "version": 22
 }

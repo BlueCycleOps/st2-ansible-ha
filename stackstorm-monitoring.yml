@@ -97,6 +97,7 @@
         apply:
           become: yes
           vars:
+            grafana_url: "http://{{ ansible_default_ipv4.address | default(ansible_host) }}:3000"
             grafana_security:
               admin_user: "{{ st2ha_grafana_admin_username }}"
               admin_password: "{{ st2ha_grafana_admin_password }}"

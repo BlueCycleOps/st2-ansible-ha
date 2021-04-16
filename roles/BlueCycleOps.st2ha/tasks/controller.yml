@@ -32,6 +32,11 @@
         username: "{{ st2ha_mongodb_username }}"
         password: "{{ st2ha_mongodb_password }}"
         db_name: "{{ st2ha_mongodb_database }}"
+      garbagecollector:
+        action_executions_output_ttl: "{{ st2ha_garbagecollector_action_executions_output_ttl }}"
+        action_executions_ttl: "{{ st2ha_garbagecollector_action_executions_ttl }}"
+        trigger_instances_ttl: "{{ st2ha_garbagecollector_trigger_instances_ttl }}"
+        purge_inquiries: True
       messaging:
         url: "amqp://{{ st2ha_rabbitmq_username }}:{{ st2ha_rabbitmq_password }}@{{ st2ha_controller_host }}:5672/"
       metrics:
@@ -52,10 +57,13 @@
     # - st2notifier can only one run of these
     # - st2auth needed for st2chatops Ansible role in order to generate an API key
     # - st2api needed for st2chatops Ansible role in order to generate an API key
+    # - st2garbagecollector cleans up the database, purging old executions and triggers
+    #                      we run this on the controller because that is where the database lives
     # - st2timersengine can only run one of these
     st2_services:
       - st2api
       - st2auth
+      - st2garbagecollector
       - st2notifier
       - st2timersengine
     st2_services_versioned: {}

@@ -47,7 +47,7 @@ all:
           ansible_host: 10.16.11.100
           ansible_user: centos
           ansible_ssh_private_key_file: ~/.ssh/id_rsa
-    
+
     workers:
       vars:
         st2ha_node_type: 'worker'
@@ -69,5 +69,5 @@ all:
           ansible_host: 10.16.11.99
           ansible_user: centos
           ansible_ssh_private_key_file: ~/.ssh/id_rsa
-  
+
 # boolean to disable chatops service
