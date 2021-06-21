@@ -23,6 +23,6 @@ st2ha_datastore_key_path: 'files/st2/datastore_key.json'
 
 # StackStorm garbage collector configs
 # TTLs are in Days
-st2ha_garbagecollector_action_executions_output_ttl: 30
-st2ha_garbagecollector_action_executions_ttl: 30
-st2ha_garbagecollector_trigger_instances_ttl: 30
+st2ha_garbagecollector_action_executions_output_ttl: 7
+st2ha_garbagecollector_action_executions_ttl: 7
+st2ha_garbagecollector_trigger_instances_ttl: 7

@@ -23,9 +23,10 @@
     st2_python_packages:
       - redis
     # run everything except: st2notifier, st2timersengine
+    # - st2resultstracker: service was removed in v3.4
     st2_services:
       - st2actionrunner
-      - st2resultstracker
+      # - st2resultstracker
       - st2rulesengine
       - st2sensorcontainer
       - st2api
