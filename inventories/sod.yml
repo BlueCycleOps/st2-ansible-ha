@@ -13,17 +13,16 @@ all:
     st2_auth_username: st2admin
     st2_auth_password: Ch@ngeMe
     st2ha_packs:
-      - git@github.com:SOD-Exchange/sod-aws_cloudtrail=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-aws_guardduty=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-aws_inspector=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-cisco_meraki=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-cisco_umbrella=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-devo=KafkaProcessingUpdates
-      - git@github.com:SOD-Exchange/sod-ms_atp=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-ms_azure_ad=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-ms_o365=TurningOffTriggers
-      - git@github.com:SOD-Exchange/sod-duo=RemovingTriggers
-      - git@github.com:SOD-Exchange/sod-trendmicro_apex=PackSetup
+      - git@github.com:SOD-Exchange/sod-aws_cloudtrail.git
+      - git@github.com:SOD-Exchange/sod-aws_guardduty.git
+      - git@github.com:SOD-Exchange/sod-aws_inspector.git
+      - git@github.com:SOD-Exchange/sod-cisco_meraki.git
+      - git@github.com:SOD-Exchange/sod-devo.git
+      - git@github.com:SOD-Exchange/sod-ms_atp.git
+      - git@github.com:SOD-Exchange/sod-ms_azure_ad.git
+      - git@github.com:SOD-Exchange/sod-ms_o365.git
+      - git@github.com:SOD-Exchange/sod-duo.git
+      - git@github.com:SOD-Exchange/sod-trendmicro_apex.git
     st2ha_influxdb_host: st2mon
     st2ha_influxdb_database: 'telegraf'
     st2ha_influxdb_admin_username: admin
