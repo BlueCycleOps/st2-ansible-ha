@@ -20,7 +20,6 @@ all:
       - git@github.com:SOD-Exchange/sod-devo.git
       - git@github.com:SOD-Exchange/sod-ms_atp.git
       - git@github.com:SOD-Exchange/sod-ms_azure_ad.git
-      - git@github.com:SOD-Exchange/sod-ms_o365.git
       - git@github.com:SOD-Exchange/sod-duo.git
       - git@github.com:SOD-Exchange/sod-trendmicro_apex.git
     st2ha_influxdb_host: st2mon
